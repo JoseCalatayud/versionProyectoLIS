@@ -1,5 +1,6 @@
 package es.santander.ascender.proyectoFinal2.controller;
 
+import es.santander.ascender.proyectoFinal2.model.DetalleVenta;
 import es.santander.ascender.proyectoFinal2.model.Usuario;
 import es.santander.ascender.proyectoFinal2.model.Venta;
 import es.santander.ascender.proyectoFinal2.service.UsuarioService;
@@ -14,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +50,16 @@ public class VentaController {
         return ResponseEntity.ok(ventaService.buscarPorFechas(fechaInicio, fechaFin));
     }
 
+    //Lista de DetallesVentas de una compra
+    @GetMapping("/{id}/detalles")
+    public ResponseEntity<List<DetalleVenta>> buscarDetallesVenta(@PathVariable Long id) {
+        Optional<Venta> venta = ventaService.buscarPorId(id);
+        return venta.map(v -> ResponseEntity.ok(v.getDetalles()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLEADO')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @Operation(summary = "Realizar nueva venta", description = "Crea una nueva venta asociada al usuario autenticado")
     public ResponseEntity<?> realizarVenta(@RequestBody Venta venta) {
         try {

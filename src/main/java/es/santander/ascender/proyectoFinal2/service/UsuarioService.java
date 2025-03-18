@@ -82,6 +82,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Transactional(readOnly = true)
     public boolean esAdmin(Usuario usuario) {
         return usuario != null && "ADMIN".equals(usuario.getRol());
