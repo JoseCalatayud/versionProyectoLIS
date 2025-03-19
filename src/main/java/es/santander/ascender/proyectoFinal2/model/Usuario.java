@@ -47,6 +47,12 @@ public class Usuario {
     // Constructor vacío
     public Usuario() {
     }
+    // Constructor con parámetros
+    public Usuario(String username, String password) {
+        this.username = username;
+        this.password = password;
+        
+    }
 
     // Constructor con parámetros
     public Usuario(String username, String password, RolUsuario rol) {
